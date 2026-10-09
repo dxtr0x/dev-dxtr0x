@@ -1,0 +1,31 @@
+{
+  "name": "portfolio",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "dompurify": "^3.2.3",
+    "highlight.js": "^11.10.0",
+    "lucide-vue-next": "^1.0.0",
+    "marked": "^12.0.2",
+    "marked-highlight": "^2.1.4",
+    "pinia": "^2.3.0",
+    "three": "^0.170.0",
+    "vue": "^3.5.13",
+    "vue-route": "^1.5.1",
+    "vue-router": "^5.4.0"
+  },
+  "devDependencies": {
+    "@types/three": "^0.170.0",
+    "@vitejs/plugin-vue": "^5.2.1",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.17",
+    "vite": "^5.4.11",
+    "vue-tsc": "^2.1.10"
+  }
+}
