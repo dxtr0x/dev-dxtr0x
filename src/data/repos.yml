@@ -1,0 +1,19 @@
+- name: my-portfolio
+  full_name: your-username/my-portfolio
+  url: https://github.com/your-username/my-portfolio
+  private: false
+  description: My personal portfolio built with Vue and TypeScript.
+  languages:
+    - name: TypeScript
+      bytes: 25000
+    - name: Vue
+      bytes: 12000
+
+- name: rust-cli
+  full_name: your-username/rust-cli
+  url: https://github.com/your-username/rust-cli
+  private: false
+  description: A command-line tool written in Rust.
+  languages:
+    - name: Rust
+      bytes: 18000

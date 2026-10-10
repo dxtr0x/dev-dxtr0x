@@ -1,34 +1,75 @@
 import type { Project } from '@/domain/entities/Project'
 import type { Article } from '@/domain/entities/Article'
+import githubRepos from '@/data/repos.yml'
 
-// PLACEHOLDER CONTENT — replace with your real projects.
-type Seed = [title: string, language: string, description: string, tags: string[], docs?: boolean]
-const seeds: Seed[] = [
-  ['hashvault', 'Go', 'Problem: password audits leak hashes in logs. Solution: a CLI that verifies SHA-256 digests in constant time, 40k checks/sec.', ['Go', 'SHA-256', 'Bubble Tea'], true],
-  ['queuewright', 'Go', 'Problem: cron-based jobs silently fail. Solution: durable job queue with retries and dead-letter handling.', ['Go', 'PostgreSQL', 'Redis'], true],
-  ['ratelimiter', 'Go', 'Problem: bursty traffic overwhelms APIs. Solution: token-bucket middleware with sliding-window fallback, p99 < 1ms.', ['Go', 'Redis']],
-  ['paperboy', 'PHP', 'Problem: legacy mailers block requests. Solution: async mail dispatcher with templating and bounce tracking.', ['PHP', 'MySQL', 'RabbitMQ'], true],
-  ['gemfeed', 'Ruby', 'Problem: RSS aggregation is slow at scale. Solution: concurrent fetcher with conditional GETs and caching.', ['Ruby', 'Sidekiq', 'Redis']],
-  ['logslicer', 'Go', 'Problem: grepping GBs of logs is painful. Solution: indexed log search with a TUI, 10x faster than grep.', ['Go', 'Bubble Tea', 'SQLite']],
-  ['authgate', 'Go', 'Problem: every service reinvents auth. Solution: JWT/OIDC gateway with key rotation and audit trails.', ['Go', 'JWT', 'PostgreSQL'], true],
-  ['migrator', 'Go', 'Problem: risky schema changes. Solution: zero-downtime migration runner with dry-run and rollback.', ['Go', 'PostgreSQL']],
-  ['webhookd', 'Go', 'Problem: lost webhooks. Solution: signed, replayable delivery with exponential backoff.', ['Go', 'HMAC', 'Redis']],
-  ['shortlink', 'PHP', 'Problem: link analytics are bloated. Solution: lightweight shortener with privacy-first click stats.', ['PHP', 'SQLite']],
-]
+/** Shape of each repository entry exported by the GitHub Actions workflow. */
+interface GitHubRepository {
+  name: string
+  full_name: string
+  url: string
+  private: boolean
+  description: string | null
+  languages: Array<{
+    name: string
+    bytes: number
+  }>
+}
 
-export const staticProjects: Project[] = seeds.map(([title, language, description, tags, docs], i) => ({
-  id: title,
-  number: String(i + 1).padStart(2, '0'),
-  title,
-  language,
-  description,
-  tags,
-  githubUrl: `https://github.com/your-handle/${title}`,
-  docsUrl: docs ? `https://your-handle.github.io/${title}` : undefined,
+const repositories = githubRepos as GitHubRepository[]
+
+/**
+ * Keep the portfolio data limited to public repositories.
+ * IMPORTANT: repos.yml itself should also contain only public repositories
+ * before it is bundled into a public frontend build.
+ */
+const publicRepositories = repositories.filter((repo) => !repo.private)
+
+const hashvaultProject: Project = {
+  id: 'hashvault',
+  number: '01',
+  title: 'hashvault',
+  language: 'Go',
+  description:
+    'A CLI tool for verifying SHA-256 digests in constant time, designed to avoid leaking password hashes through logs.',
+  tags: ['Go', 'SHA-256', 'Bubble Tea'],
+  // Replace this URL with the actual repository URL.
+  githubUrl: 'https://github.com/your-handle/hashvault',
+}
+
+const githubProjects: Project[] = publicRepositories.map((repo, index) => ({
+  id: repo.full_name,
+  number: String(index + 2).padStart(2, '0'),
+  title: repo.name,
+  language: repo.languages[0]?.name ?? 'Unknown',
+  description:
+    repo.description?.trim() || `GitHub repository: ${repo.full_name}`,
+  tags: repo.languages.map(({ name }) => name),
+  githubUrl: repo.url,
+  // Add a docsUrl property to your YAML schema only when a real docs URL exists.
 }))
 
+export const staticProjects: Project[] = [hashvaultProject, ...githubProjects]
+
 export const staticArticles: Article[] = [
-  { id: 'a1', title: 'Designing idempotent webhooks in Go', kind: 'Blog', domain: 'dev.to', url: 'https://dev.to/' },
-  { id: 'a2', title: 'Why I think first, build second', kind: 'Blog', domain: 'dev.to', url: 'https://dev.to/' },
-  { id: 'a3', title: 'Token buckets vs sliding windows', kind: 'External', domain: 'medium.com', url: 'https://medium.com/' },
+  {
+    id: 'a1',
+    title: 'Designing idempotent webhooks in Go',
+    kind: 'Blog',
+    domain: 'dev.to',
+    url: 'https://dev.to/',
+  },
+  {
+    id: 'a2',
+    title: 'Why I think first, build second',
+    kind: 'Blog',
+    domain: 'dev.to',
+    url: 'https://dev.to/',
+  },
+  {
+    id: 'a3',
+    title: 'Token buckets vs sliding windows',
+    kind: 'External',
+    domain: 'medium.com',
+    url: 'https://medium.com/',
+  },
 ]

@@ -8,6 +8,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@octokit/rest": "^22.0.1",
+    "@types/node": "^26.6.4",
     "dompurify": "^3.2.3",
     "highlight.js": "^11.10.0",
     "lucide-vue-next": "^1.0.0",
@@ -17,9 +19,11 @@
     "three": "^0.170.0",
     "vue": "^3.5.13",
     "vue-route": "^1.5.1",
-    "vue-router": "^5.4.0"
+    "vue-router": "^5.4.0",
+    "yaml": "^2.9.1"
   },
   "devDependencies": {
+    "@modyfi/vite-plugin-yaml": "^1.1.1",
     "@types/three": "^0.170.0",
     "@vitejs/plugin-vue": "^5.2.1",
     "autoprefixer": "^10.4.20",
